@@ -138,8 +138,8 @@ public class EspetaculosController {
 	}
 
 	// metodo antigo. aqui soh por backup
-	private Estabelecimento criaEstabelecimento(Long id) {
-		return estabelecimentos.todos().get(0);
-	}
+//	private Estabelecimento criaEstabelecimento(Long id) {
+//		return estabelecimentos.todos().get(0);
+//	}
 	
 }
