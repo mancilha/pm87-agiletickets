@@ -3,6 +3,13 @@ package br.com.caelum.agiletickets.models;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
+import junit.framework.Assert;
+
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.Test;
 
 public class EspetaculoTest {
@@ -81,4 +88,75 @@ public class EspetaculoTest {
 		return sessao;
 	}
 	
+	@Test
+	public void naoDeveCriarSessoesQuandoOInicioForIgualAoFim() {
+		Espetaculo espetaculo = new Espetaculo();
+		
+		LocalDate inicio = new LocalDate("2010-01-01");
+		LocalDate fim = new LocalDate("2010-01-01");
+		LocalTime horario = new LocalTime();
+		Periodicidade periodicidade = Periodicidade.DIARIA;
+				
+		List<Sessao> sessoes = espetaculo.criaSessoes(inicio, fim, horario, periodicidade);
+		
+		Assert.assertEquals(null, sessoes);
+	}
+	
+	@Test
+	public void naoDeveCriarSessoesQuandoOInicioEDepoisDoFim() {
+		Espetaculo espetaculo = new Espetaculo();
+		
+		LocalDate inicio = new LocalDate("2010-01-03");
+		LocalDate fim = new LocalDate("2010-01-01");
+		LocalTime horario = new LocalTime();
+		Periodicidade periodicidade = Periodicidade.DIARIA;
+				
+		List<Sessao> sessoes = espetaculo.criaSessoes(inicio, fim, horario, periodicidade);
+		
+		Assert.assertEquals(null, sessoes);
+	}
+	
+	@Test
+	public void deveCriar5SessoesParaEspetaculoComIntervaloDe5DiasEPeriodicidadeDiaria() {
+		Espetaculo espetaculo = new Espetaculo();
+		espetaculo.setId(1L);
+		espetaculo.setDescricao("A Paixão de Cristo");
+		
+		LocalDate inicio = new LocalDate("2010-01-01");
+		LocalDate fim = new LocalDate("2010-01-05");
+		
+		LocalTime horario = new LocalTime(9, 0, 0);  // 09:00:00 
+		Periodicidade periodicidade = Periodicidade.DIARIA;
+				
+		List<Sessao> sessoes = espetaculo.criaSessoes(inicio, fim, horario, periodicidade);
+		
+		for (int i = 0; i < 4; i++) {
+			Assert.assertEquals(espetaculo.getId(), sessoes.get(i).getEspetaculo().getId());
+			Assert.assertEquals(inicio.toDateTime(horario).plusDays(i), sessoes.get(i).getInicio());
+		}
+		
+		Assert.assertEquals(5, sessoes.size());
+	}
+
+	@Test
+	public void deveCriar2SessoesParaEspetaculoComIntervaloDe8DiasEPeriodicidadeSemanal() {
+		Espetaculo espetaculo = new Espetaculo();
+		espetaculo.setId(1L);
+		espetaculo.setDescricao("A Paixão de Cristo");
+		
+		LocalDate inicio = new LocalDate("2010-01-01");
+		LocalDate fim = new LocalDate("2010-01-08");
+		
+		LocalTime horario = new LocalTime(9, 0, 0);  // 09:00:00 
+		Periodicidade periodicidade = Periodicidade.SEMANAL;
+				
+		List<Sessao> sessoes = espetaculo.criaSessoes(inicio, fim, horario, periodicidade);
+		
+		for (int i = 0; i < 2; i++) {
+			Assert.assertEquals(espetaculo.getId(), sessoes.get(i).getEspetaculo().getId());
+			Assert.assertEquals(inicio.toDateTime(horario).plusDays(i+7), sessoes.get(i).getInicio());
+		}
+		
+		Assert.assertEquals(2, sessoes.size());
+	}
 }
