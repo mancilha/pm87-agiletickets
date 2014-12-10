@@ -80,6 +80,9 @@ public class CalculadoraDePrecos {
 				preco = sessao.getPreco();
 		}
 		
+		// Implementando o Design Pattern Strategy.
+		// sessao.getTipo.getCalculador().calcula();
+		
 		return preco.multiply(BigDecimal.valueOf(quantidade));
 	}
 
