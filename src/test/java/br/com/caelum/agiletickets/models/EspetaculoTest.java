@@ -157,6 +157,6 @@ public class EspetaculoTest {
 			Assert.assertEquals(inicio.toDateTime(horario).plusDays(i+7), sessoes.get(i).getInicio());
 		}
 		
-		Assert.assertEquals(3, sessoes.size());
+		Assert.assertEquals(2, sessoes.size());
 	}
 }
